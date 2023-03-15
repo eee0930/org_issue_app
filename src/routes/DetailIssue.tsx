@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useQuery } from "react-query";
+//import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { getIssueDetail, IIssueDetails, IReactions } from "../api";
+import { CONTENT_TYPE, IIssueDetails, IReactions, octokit } from "../api";
 import { selectedOrgState } from "../atoms";
 import { TitleSection, Number, IssueTitle, Comments, ContentTitle, SpanStyle } from "../utils/commonStyles";
 import { DetailContainer, DetailHeaderBox, ProfileImage } from "../utils/detailIssueStyles";
@@ -33,17 +33,47 @@ const Reaction = styled.label`
     margin-right: 8px;
 `;
 
-
 function DetailIssue() {
     const { number } = useParams();
     const selectedOrg = useRecoilValue(selectedOrgState);
     const issueNumber = number as string;
+    const [issueData, setIssueData] = useState<IIssueDetails>();
+    const [isLoading, setIsLoading] = useState(true);
 
-    const { data, isLoading } = useQuery<IIssueDetails>(
-        ["issue", number],
-        () => getIssueDetail(selectedOrg.org, selectedOrg.rep, +issueNumber)
-    );
-    
+    // const { data, isLoading } = useQuery<IIssueDetails>(
+    //     ["issue", number],
+    //     () => getIssueDetail(selectedOrg.org, selectedOrg.rep, +issueNumber)
+    // );
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setIsLoading(true);
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 1000);
+                const response = await octokit.request("GET /repos/{owner}/{repo}/issues/{issue_number}", {
+                    owner: selectedOrg.org,
+                    repo: selectedOrg.rep,
+                    issue_number: +issueNumber,
+                    headers: {
+                        "content-type": CONTENT_TYPE,
+                    },
+                });
+                setIssueData(response.data as IIssueDetails);
+                const successMsg = `Success! Status: ${response.status}. 
+                Rate limit remaining: ${response.headers["x-ratelimit-remaining"]}`;
+                console.log(successMsg);
+                setIsLoading(false);
+            } catch (error) {
+                setIsLoading(false);
+                console.log("error", error);
+            }
+        };
+        fetchData();
+    }, [issueNumber, selectedOrg.org, selectedOrg.rep]);
+
+
     useEffect(() => window.scrollTo(0, 0), []);
 
     return <div className="page-container">
@@ -55,46 +85,46 @@ function DetailIssue() {
             </Loader>
         ) : (<>
             <Helmet>
-                <title>{data?.title}</title>
+                <title>{issueData?.title}</title>
             </Helmet>
             <DetailContainer>
                 {/* ------------------[1. 상세보기 헤더 영역]-------------------- */}
                 <DetailHeaderBox className="row">
                     <div className="col-auto align-self-center">
                         <ProfileImage 
-                            backgroundImage={data?.user.avatar_url as string} />
+                            backgroundImage={issueData?.user.avatar_url as string} />
                     </div>
                     <div className="col align-self-center">
                         <TitleSection>
-                            <Number>#{data?.number}</Number> 
-                            <IssueTitle>{data?.title}</IssueTitle>
+                            <Number>#{issueData?.number}</Number> 
+                            <IssueTitle>{issueData?.title}</IssueTitle>
                         </TitleSection>
                         <div>
                             <SpanStyle>
                                 <ContentTitle>writer : </ContentTitle>
-                                {data?.user.login}
+                                {issueData?.user.login}
                             </SpanStyle>
                             <SpanStyle>
                                 <ContentTitle>date : </ContentTitle>
-                                {data?.created_at.slice(0, 10)}
+                                {issueData?.created_at.slice(0, 10)}
                             </SpanStyle>
                         </div>
                     </div>
                     <div className="col-1 col-sm-2 text-center align-self-center">
                         <Comments>
                             <ContentTitle className="title">comment : </ContentTitle>
-                            <div className="count">{data?.comments}</div>
+                            <div className="count">{issueData?.comments}</div>
                         </Comments>
                     </div>
                 </DetailHeaderBox>
 
                 {/* ------------------[2. 상세보기 본문 영역]-------------------- */}
                 <DetailBodyBox>
-                    <Pre>{data?.body}</Pre>
+                    <Pre>{issueData?.body}</Pre>
                     <Reactions>
-                        {Object.keys(data?.reactions as IReactions).map((reaction) => {
-                            if(reaction !== "url" && reaction !== "total_count" && data?.reactions[reaction] !== 0) {
-                                return <Reaction key={reaction}>{reaction} {data?.reactions[reaction]}</Reaction>;
+                        {Object.keys(issueData?.reactions as IReactions).map((reaction) => {
+                            if(reaction !== "url" && reaction !== "total_count" && issueData?.reactions[reaction] !== 0) {
+                                return <Reaction key={reaction}>{reaction} {issueData?.reactions[reaction]}</Reaction>;
                             }
                         })}
                     </Reactions>

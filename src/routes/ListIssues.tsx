@@ -6,15 +6,11 @@ import styled from "styled-components";
 import IssueItems from "../components/IssueItems";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { orgIssueListSetState, selectedOrgState, Iissue, orgIssueSelector } from "../atoms";
-import { GITHUB_TOKEN, CONTENT_TYPE } from "../api";
+import { GITHUB_TOKEN, CONTENT_TYPE, octokit } from "../api";
 
 const RESPONSE_STATE = "open";
 const RESPONSE_SORT = "comments";
 const RESPONSE_PER_PAGE = 10;
-
-const octokit = new Octokit({ 
-    auth: GITHUB_TOKEN,
-});
 
 const Modal = styled.div`
     position: fixed;
