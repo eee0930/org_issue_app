@@ -1,47 +1,16 @@
+/* eslint-disable array-callback-return */
 import Markdown from 'marked-react';
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-//import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import styled from "styled-components";
 import { CONTENT_TYPE, IIssueDetails, IReactions, octokit } from "../api";
 import { selectedOrgState } from "../atoms";
 import { TitleSection, Number, IssueTitle, Comments, ContentTitle, SpanStyle } from "../utils/commonStyles";
-import { DetailContainer, DetailHeaderBox, ProfileImage } from "../utils/detailIssueStyles";
+import { DetailBodyBox, DetailContainer, DetailHeaderBox, ProfileImage, Reaction, ReactionIcon, Reactions } from "../utils/detailIssueStyles";
 import { Loader } from "../utils/globalStyles";
 
-const DetailBodyBox = styled.div`
-    padding: 8px;
-    width: 100%;
-    line-height: 1.5;
-    @media only screen and (min-width: 768px) {
-        padding: 12px;
-    }
-    a {
-        color: ${props => props.theme.white.veryDark};
-        border-bottom: solid 1px ${props => props.theme.white.veryDark};
-        margin-bottom: 5px;
-    }
-    a:hover {
-        color: ${props => props.theme.red};
-        border-bottom-color: ${props => props.theme.red};
-    }
-    p {
-        margin: 10px 0;
-    }
-`;
-const Reactions = styled.div`
-    margin-top: 25px;
-    font-size: 14px;
-`;
-const Reaction = styled.label`
-    padding: 4px 8px;
-    border-radius: 15px;
-    border: solid 1px ${props => props.theme.black.lighter};
-    background-color: ${props => props.theme.black.lighter};
-    margin-right: 8px;
-`;
+
 
 function DetailIssue() {
     const { number } = useParams();
@@ -49,10 +18,6 @@ function DetailIssue() {
     const issueNumber = number as string;
     const [issueData, setIssueData] = useState<IIssueDetails>();
     const [isLoading, setIsLoading] = useState(true);
-    // const { data, isLoading } = useQuery<IIssueDetails>(
-    //     ["issue", number],
-    //     () => getIssueDetail(selectedOrg.org, selectedOrg.rep, +issueNumber)
-    // );
 
     useEffect(() => {
         const fetchData = async () => {
@@ -119,7 +84,7 @@ function DetailIssue() {
                             </SpanStyle>
                         </div>
                     </div>
-                    <div className="col-1 col-sm-2 text-center align-self-center">
+                    <div className="col-2 text-center align-self-center">
                         <Comments>
                             <ContentTitle className="title">comment : </ContentTitle>
                             <div className="count">{issueData?.comments}</div>
@@ -133,7 +98,10 @@ function DetailIssue() {
                     <Reactions>
                         {Object.keys(issueData?.reactions as IReactions).map((reaction) => {
                             if(reaction !== "url" && reaction !== "total_count" && issueData?.reactions[reaction] !== 0) {
-                                return <Reaction key={reaction}>{reaction} {issueData?.reactions[reaction]}</Reaction>;
+                                return <Reaction key={reaction}>
+                                    <ReactionIcon className={'icon' + (reaction === '+1'? 'plus' : reaction)}/>
+                                    {issueData?.reactions[reaction]}
+                                </Reaction>;
                             }
                         })}
                     </Reactions>

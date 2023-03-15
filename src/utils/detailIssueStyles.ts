@@ -37,3 +37,80 @@ export const ProfileImage = styled.div<{ backgroundImage: string }>`
         border-radius: 20px;
     }
 `;
+export const DetailBodyBox = styled.div`
+    padding: 8px;
+    width: 100%;
+    font-size: 16px;
+    line-height: 1.5;
+    @media only screen and (min-width: 768px) {
+        padding: 12px;
+        font-size: 15px;
+    }
+    a { color: #58a6ff; }
+    a:hover { border-bottom: solid 1px #58a6ff; }
+    p {margin: 10px 0;}
+    h1 {font-size: 1.6em;}
+    h2 {font-size: 1.5em;}
+    h3 {font-size: 1.4em;}
+    h4 {font-size: 1.3em;}
+    h5 {font-size: 1.2em;}
+    em {font-style: italic;}
+    hr {margin: 20px 0;}
+    ul, ol {padding-left: 2em; list-style-type: disc;}
+    li {display: list-item;}
+    img {max-width: 100%;}
+`;
+export const Reactions = styled.div`
+    margin-top: 25px;
+    font-size: 14px;
+`;
+export const Reaction = styled.label`
+    padding: 4px 8px;
+    border-radius: 15px;
+    border: solid 2px ${props => props.theme.black.lighter};
+    margin-right: 8px;
+`;
+export const ReactionIcon = styled.label`
+    width: 20px;
+    height: 20px;
+    padding: 0 10px;
+    position: relative;
+    margin-right: 4px;
+    &:after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 16px;
+    }
+    &.iconplus:after {
+        content: '👍';
+    }
+    &.icon-1:after {
+        content: '👎';
+    }
+    &.iconlaugh:after {
+        content: '😁';
+    }
+    &.iconhooray:after {
+        content: '🎉';
+    }
+    &.iconconfused:after {
+        content: '😕';
+    }
+    &.iconheart:after {
+        content: '❤️';
+    }
+    &.iconrocket:after {
+        content: '🚀';
+    }
+    &.iconeyes:after {
+        content: '👀';
+    }
+    
+    
+    
+    
+    
+    
+`;

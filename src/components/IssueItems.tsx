@@ -3,8 +3,8 @@ import { IIssueList } from "../atoms";
 import { SpanStyle, TitleSection, Number, IssueTitle, ContentTitle, Comments } from "../utils/commonStyles";
 import { IssueBox, AdBox, AdImg} from "../utils/listIssuesStyles";
 
-const AD_PATH = `${process.env.PUBLIC_URL}/lazy_sleep.png`;
-const AD_ERROR_PATH = `${process.env.PUBLIC_URL}/no_image.jpg`;
+const AD_PATH = `${process.env.PUBLIC_URL}/image/lazy_sleep.png`;
+const AD_ERROR_PATH = `${process.env.PUBLIC_URL}/image/no_image.jpg`;
 const AD_LINK = 'https://github.com/eee0930/github_issue_app';
 
 function IssueItems({ issueList }: IIssueList) {
