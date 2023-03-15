@@ -48,15 +48,31 @@ export const DetailBodyBox = styled.div`
     }
     a { color: #58a6ff; }
     a:hover { border-bottom: solid 1px #58a6ff; }
-    p {margin: 10px 0;}
-    h1 {font-size: 1.6em;}
-    h2 {font-size: 1.5em;}
-    h3 {font-size: 1.4em;}
-    h4 {font-size: 1.3em;}
-    h5 {font-size: 1.2em;}
+    p {margin-bottom: 12px;}
+    h1, h2, h3 {
+        margin-top: 20px;
+        margin-bottom: 12px;
+    }
+    h1 {
+        font-size: 1.6em;
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid #21262d;
+    }
+    h2 {
+        font-size: 1.5em;
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid #21262d;
+    }
+    h3 {font-size: 1.25em;}
+    h4 {font-size: 1.2em;}
+    h5 {font-size: 1.1em;}
     em {font-style: italic;}
     hr {margin: 20px 0;}
-    ul, ol {padding-left: 2em; list-style-type: disc;}
+    ul, ol {
+        padding-left: 2em; 
+        list-style-type: disc;
+        margin-bottom: 12px;
+    }
     li {display: list-item;}
     img {max-width: 100%;}
 `;
@@ -106,11 +122,5 @@ export const ReactionIcon = styled.label`
     }
     &.iconeyes:after {
         content: '👀';
-    }
-    
-    
-    
-    
-    
-    
+    }   
 `;

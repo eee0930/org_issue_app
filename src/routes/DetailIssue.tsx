@@ -10,8 +10,6 @@ import { TitleSection, Number, IssueTitle, Comments, ContentTitle, SpanStyle } f
 import { DetailBodyBox, DetailContainer, DetailHeaderBox, ProfileImage, Reaction, ReactionIcon, Reactions } from "../utils/detailIssueStyles";
 import { Loader } from "../utils/globalStyles";
 
-
-
 function DetailIssue() {
     const { number } = useParams();
     const selectedOrg = useRecoilValue(selectedOrgState);
