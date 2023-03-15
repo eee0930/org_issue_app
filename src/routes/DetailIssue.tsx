@@ -1,3 +1,4 @@
+import Markdown from 'marked-react';
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 //import { useQuery } from "react-query";
@@ -13,13 +14,22 @@ import { Loader } from "../utils/globalStyles";
 const DetailBodyBox = styled.div`
     padding: 8px;
     width: 100%;
+    line-height: 1.5;
     @media only screen and (min-width: 768px) {
         padding: 12px;
     }
-`;
-const Pre = styled.pre`
-    white-space: break-spaces;
-    
+    a {
+        color: ${props => props.theme.white.veryDark};
+        border-bottom: solid 1px ${props => props.theme.white.veryDark};
+        margin-bottom: 5px;
+    }
+    a:hover {
+        color: ${props => props.theme.red};
+        border-bottom-color: ${props => props.theme.red};
+    }
+    p {
+        margin: 10px 0;
+    }
 `;
 const Reactions = styled.div`
     margin-top: 25px;
@@ -39,7 +49,6 @@ function DetailIssue() {
     const issueNumber = number as string;
     const [issueData, setIssueData] = useState<IIssueDetails>();
     const [isLoading, setIsLoading] = useState(true);
-
     // const { data, isLoading } = useQuery<IIssueDetails>(
     //     ["issue", number],
     //     () => getIssueDetail(selectedOrg.org, selectedOrg.rep, +issueNumber)
@@ -120,7 +129,7 @@ function DetailIssue() {
 
                 {/* ------------------[2. 상세보기 본문 영역]-------------------- */}
                 <DetailBodyBox>
-                    <Pre>{issueData?.body}</Pre>
+                    <Markdown>{issueData?.body}</Markdown>
                     <Reactions>
                         {Object.keys(issueData?.reactions as IReactions).map((reaction) => {
                             if(reaction !== "url" && reaction !== "total_count" && issueData?.reactions[reaction] !== 0) {

@@ -1,9 +1,7 @@
-import { AnyNsRecord } from "dns";
 import { Octokit } from "octokit";
 
 export const CONTENT_TYPE = "application/json";
 export const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
-const HOST_URL = process.env.REACT_APP_HOST_URL;
 
 export const octokit = new Octokit({ 
     auth: GITHUB_TOKEN,

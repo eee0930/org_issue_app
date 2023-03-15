@@ -1,12 +1,11 @@
 import { Helmet } from "react-helmet";
-import { Octokit } from "octokit";
 import { Loader } from "../utils/globalStyles";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import IssueItems from "../components/IssueItems";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { orgIssueListSetState, selectedOrgState, Iissue, orgIssueSelector } from "../atoms";
-import { GITHUB_TOKEN, CONTENT_TYPE, octokit } from "../api";
+import { CONTENT_TYPE, octokit } from "../api";
 
 const RESPONSE_STATE = "open";
 const RESPONSE_SORT = "comments";
