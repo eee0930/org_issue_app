@@ -5,6 +5,7 @@ interface ISelectedOrg {
     setId: string;
     org: string;
     rep: string;
+    page: number;
 };
 interface IIssueName {
     [key: string]: string[];
@@ -20,7 +21,7 @@ export interface Iissue {
     comments: number;
 };
 export interface IIssueList {
-    page?: number;
+    page: number;
     issueList: Iissue[];
 };
 export interface IOrgIssueList {
@@ -47,6 +48,7 @@ export const selectedOrgState = atom<ISelectedOrg>({
         setId: "reactjs_0",
         org: "reactjs",
         rep: "reactjs.org",
+        page: 1,
     },
     effects_UNSTABLE: [persistAtom],
 });

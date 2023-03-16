@@ -3,13 +3,9 @@ import { Loader } from "../utils/globalStyles";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import IssueItems from "../components/IssueItems";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 import { orgIssueListSetState, selectedOrgState, Iissue, orgIssueSelector } from "../atoms";
-import { CONTENT_TYPE, octokit } from "../api";
-
-const RESPONSE_STATE = "open";
-const RESPONSE_SORT = "comments";
-const RESPONSE_PER_PAGE = 10;
+import { fetchIssueList } from "../api";
 
 const Modal = styled.div`
     position: fixed;
@@ -73,10 +69,9 @@ interface INewIssueListSet {
 
 function ListIssues() {
     const setOrgIssueListSet = useSetRecoilState(orgIssueListSetState);
-    const selectedIssueOrg = useRecoilValue(selectedOrgState);
+    const [selectedOrg, setSelectedOrg] = useRecoilState(selectedOrgState);
     const orgIssueSelect = useRecoilValue(orgIssueSelector);
     const [isLoading, setIsLoading] = useState(false);
-    const [contentPage, setContentPage] = useState(1);
     
     useEffect(() => window.scrollTo(0, 0), []);
     
@@ -97,7 +92,15 @@ function ListIssues() {
                 [setId]: newIssueListSet,
             }
         });
-        setContentPage((prev) => prev += 1);
+        setSelectedOrg((prevOrg) => {
+            const newOrg = {
+                setId: prevOrg.setId,
+                org: prevOrg.org,
+                rep: prevOrg.rep,
+                page,
+            };
+            return newOrg;
+        });
     };
 
     const getIssueList = async (page : number) => {        
@@ -107,20 +110,9 @@ function ListIssues() {
             setTimeout(() => {
                 setIsLoading(false);
             }, 1000);
-            const response = await octokit.request("GET /repos/{owner}/{repo}/issues", {
-                owner: selectedIssueOrg.org,
-                repo: selectedIssueOrg.rep,
-                state: RESPONSE_STATE,
-                sort: RESPONSE_SORT,
-                per_page: RESPONSE_PER_PAGE, 
-                page,
-                headers: {
-                    "content-type": CONTENT_TYPE,
-                },
-            });
-
+            const response = await fetchIssueList(selectedOrg.org, selectedOrg.rep, page);
             const args = {
-                setId: selectedIssueOrg.setId,
+                setId: selectedOrg.setId,
                 page,
                 issueList: response.data
             } as INewIssueListSet;
@@ -129,6 +121,7 @@ function ListIssues() {
             const successMsg = `Success! Status: ${response.status}. 
                 Rate limit remaining: ${response.headers["x-ratelimit-remaining"]}`;
             console.log(successMsg);
+            console.log(selectedOrg.org, selectedOrg.rep, page);
         } catch (error) {
             setIsLoading(false);
             console.log("error", error);
@@ -136,15 +129,26 @@ function ListIssues() {
     }; 
     
     const handleReset = () => {
-        const setId = selectedIssueOrg.setId;
-        setOrgIssueListSet((allOrgListSet) => {
-            const newOrgListSet = [] as any[];
+        const setId = selectedOrg.setId;
+        setOrgIssueListSet((allOrgListSet: any) => {
+            const newIssueList = {
+                page: 0,
+                issueList: [],
+            };
             return {
                 ...allOrgListSet,
-                [setId]: newOrgListSet,
+                [setId]: [newIssueList],
             }
         });
-        setContentPage(1);
+        setSelectedOrg((prevOrg) => {
+            const newOrg = {
+                setId: prevOrg.setId,
+                org: prevOrg.org,
+                rep: prevOrg.rep,
+                page: 0,
+            };
+            return newOrg;
+        });
     };
 
     return (<>
@@ -165,7 +169,7 @@ function ListIssues() {
             <div className="row">
                 {/* load button */}
                 <div className="col-6">
-                    <GetButton onClick={() => getIssueList(contentPage)}>
+                    <GetButton onClick={() => getIssueList(selectedOrg.page + 1)}>
                         {isLoading ? (
                             <Loader>
                                 <div>

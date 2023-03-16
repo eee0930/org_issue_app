@@ -2,53 +2,47 @@
 import Markdown from 'marked-react';
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { CONTENT_TYPE, IIssueDetails, IReactions, octokit } from "../api";
-import { selectedOrgState } from "../atoms";
+import { Link, useParams } from "react-router-dom";
+import { IIssueDetails, IReactions, fetchIssueDetail } from "../api";
 import { TitleSection, Number, IssueTitle, Comments, ContentTitle, SpanStyle } from "../utils/commonStyles";
-import { DetailBodyBox, DetailContainer, DetailHeaderBox, ProfileImage, Reaction, ReactionIcon, Reactions } from "../utils/detailIssueStyles";
+import { DetailBodyBox, CategorySection, DetailContainer, DetailHeaderBox, ProfileImage, 
+        Reaction, ReactionIcon, Reactions } from "../utils/detailIssueStyles";
 import { Loader } from "../utils/globalStyles";
 
+interface IParams {
+    org: string;
+    rep: string;
+    number: string;
+}
+
 function DetailIssue() {
-    const { number } = useParams();
-    const selectedOrg = useRecoilValue(selectedOrgState);
-    const issueNumber = number as string;
+    const { org, rep, number } = useParams() as unknown as IParams;
     const [issueData, setIssueData] = useState<IIssueDetails>();
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchData = async () => {
+        const getIssueDetailData = async () => { 
             try {
                 setIsLoading(true);
                 setTimeout(() => {
                     setIsLoading(false);
                 }, 1000);
-                const response = await octokit.request("GET /repos/{owner}/{repo}/issues/{issue_number}", {
-                    owner: selectedOrg.org,
-                    repo: selectedOrg.rep,
-                    issue_number: +issueNumber,
-                    headers: {
-                        "content-type": CONTENT_TYPE,
-                    },
-                });
-                setIssueData(response.data as IIssueDetails);
+                const response = await fetchIssueDetail(org, rep, number);
+                setIssueData((response).data as IIssueDetails);
                 const successMsg = `Success! Status: ${response.status}. 
-                Rate limit remaining: ${response.headers["x-ratelimit-remaining"]}`;
+                    Rate limit remaining: ${response.headers["x-ratelimit-remaining"]}`;
                 console.log(successMsg);
-                setIsLoading(false);
             } catch (error) {
                 setIsLoading(false);
                 console.log("error", error);
             }
         };
-        fetchData();
-    }, [issueNumber, selectedOrg.org, selectedOrg.rep]);
-
-
-    useEffect(() => window.scrollTo(0, 0), []);
+        window.scrollTo(0, 0);
+        getIssueDetailData();
+    }, [number, org, rep]);
 
     return <div className="page-container">
+       
         {isLoading? (
             <Loader>
                 <div>
@@ -59,7 +53,12 @@ function DetailIssue() {
             <Helmet>
                 <title>{issueData?.title}</title>
             </Helmet>
+            
             <DetailContainer>
+                <CategorySection>
+                    <Link to='/'>{org +  ' - ' +  rep} list </Link>
+                    / {issueData?.title}
+                </CategorySection>
                 {/* ------------------[1. 상세보기 헤더 영역]-------------------- */}
                 <DetailHeaderBox className="row">
                     <div className="col-auto align-self-center">
@@ -94,14 +93,17 @@ function DetailIssue() {
                 <DetailBodyBox>
                     <Markdown>{issueData?.body}</Markdown>
                     <Reactions>
-                        {Object.keys(issueData?.reactions as IReactions).map((reaction) => {
-                            if(reaction !== "url" && reaction !== "total_count" && issueData?.reactions[reaction] !== 0) {
-                                return <Reaction key={reaction}>
-                                    <ReactionIcon className={'icon' + (reaction === '+1'? 'plus' : reaction)}/>
-                                    {issueData?.reactions[reaction]}
-                                </Reaction>;
-                            }
-                        })}
+                        {issueData?.reactions && 
+                            Object.keys(issueData?.reactions as IReactions).map((reaction) => {
+                                if(reaction !== "url" && reaction !== "total_count" 
+                                    && issueData?.reactions[reaction] !== 0) {
+                                    return <Reaction key={reaction}>
+                                        <ReactionIcon className={'icon' + (reaction === '+1'? 'plus' : reaction)}/>
+                                        {issueData?.reactions[reaction]}
+                                    </Reaction>;
+                                }
+                            })
+                        }
                     </Reactions>
                 </DetailBodyBox>
             </DetailContainer>
@@ -110,18 +112,3 @@ function DetailIssue() {
 }
 
 export default DetailIssue;
-
-    // Octokit과 useEffect를 이용하여 데이터 불러오기
-    // useEffect 안에서 fetch 함수를 한번 불러옴.
-    
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const response = await octokit.rest.issues.get({
-    //             owner: "Angular",
-    //             repo: "Angular-cli",
-    //             issue_number: Number(id),
-    //         });
-    //         setIssueData(response.data as IIssueData);
-    //     };
-    //     fetchData();
-    // }, [id]);

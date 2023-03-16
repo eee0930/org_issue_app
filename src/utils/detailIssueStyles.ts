@@ -6,6 +6,14 @@ export const DetailContainer = styled.div`
     margin: 0 auto;
     min-height: 200px;
 `;
+export const CategorySection = styled.div`
+    margin: 20px 10px;
+    font-size: 13px;
+    color: ${props => props.theme.white.veryDark};
+    a:hover {
+        color: ${props => props.theme.green};
+    }
+`;
 export const DetailHeaderBox = styled.div`
     margin: 10px 0;
     border-bottom: 1px solid ${props => props.theme.black.lighter};
@@ -85,6 +93,8 @@ export const Reaction = styled.label`
     border-radius: 15px;
     border: solid 2px ${props => props.theme.black.lighter};
     margin-right: 8px;
+    margin-bottom: 8px;
+    display: inline-block;
 `;
 export const ReactionIcon = styled.label`
     width: 20px;

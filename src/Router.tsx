@@ -17,7 +17,7 @@ const router = createHashRouter([
                 element: <ListIssues />,
                 errorElement: <ErrorComponent />,
             },{
-                path: "issue/:number",
+                path: ":org/:rep/:number",
                 element: <DetailIssue />,
                 errorElement: <ErrorComponent />,
             }

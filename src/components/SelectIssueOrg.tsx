@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useMatch } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { issueNameState, selectedOrgState } from "../atoms";
+import { issueNameState, orgIssueListSetState, selectedOrgState } from "../atoms";
 
 const Select = styled.select`
-    width: 130px;
+    width: 135px;
     font-size: 17px;
     padding: 5px 8px 7px;
     border-radius: 5px;
@@ -19,29 +19,44 @@ const Select = styled.select`
 `;
 
 function SelectIssueOrg() {
+    const orgIssueListSet = useRecoilValue(orgIssueListSetState);
     const getIssueNames = useRecoilValue(issueNameState);
     const [selectedOrg, setSelectedOrg] = useRecoilState(selectedOrgState);
     const [issueRepList, setIssueRepList] = useState(getIssueNames[selectedOrg.org]);
-    const detialPageMatch = useMatch('/issue/:number');
+    
+    const detialPageMatch = useMatch('/:org/:rep/:number');
 
+    const getNowIssuePage = (nowSetId: string) => {
+        let issuePage = 0;
+        if(orgIssueListSet[nowSetId] !== undefined) {
+            const lastIndex = orgIssueListSet[nowSetId].length - 1;
+            const thisPage = orgIssueListSet[nowSetId][lastIndex].page as number;
+            issuePage = thisPage;
+        }
+        return issuePage;
+    };
     const handleOrgChange = (event:React.FormEvent<HTMLSelectElement>) => {
         const value = event.currentTarget.value as string;
         const newIssueRepList = getIssueNames[value];
+        const nowSetPage = getNowIssuePage(`${value}_0`) as number;
         setIssueRepList(newIssueRepList);
         const newIssueOrg = {
             setId: `${value}_0`,
             org: value,
             rep: newIssueRepList[0],
+            page: nowSetPage,
         }
         setSelectedOrg(newIssueOrg);
     };
     const handleRepChange = (event:React.FormEvent<HTMLSelectElement>) => {
         const value = event.currentTarget.value;
         setSelectedOrg((prevOrg) => {
+            const nowSetPage = getNowIssuePage(`${prevOrg.org}_${value}`) as number;
             const newOrg = {
                 setId: `${prevOrg.org}_${value}`,
                 org: prevOrg.org,
                 rep: getIssueNames[prevOrg.org][+value],
+                page: nowSetPage,
             }
             return newOrg;
         });
