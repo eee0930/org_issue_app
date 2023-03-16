@@ -1,13 +1,17 @@
 import styled from "styled-components";
 
-export const DetailContainer = styled.div`
+export const DetailBodyContainer = styled.div`
     width: 100%;
     max-width: 1300px;
     margin: 0 auto;
+`;
+export const DetailContainer = styled.div`
+    border-radius: 20px;
+    border: 1px solid ${props => props.theme.black.lighter};
     min-height: 200px;
 `;
 export const CategorySection = styled.div`
-    margin: 20px 10px;
+    margin: 25px 0px;
     font-size: 13px;
     color: ${props => props.theme.white.veryDark};
     a:hover {
@@ -15,14 +19,39 @@ export const CategorySection = styled.div`
     }
 `;
 export const DetailHeaderBox = styled.div`
-    margin: 10px 0;
+    padding: 15px;
     border-bottom: 1px solid ${props => props.theme.black.lighter};
     >div {
-        padding: 8px 4px;
+        padding: 0 7px;
+    }
+    >div:first-child {
+        padding: 0 7px 0 0;
+    }
+    >div:last-child {
+        padding: 0 0 0 7px;
     }
     @media only screen and (min-width: 768px) {
+        padding: 20px;
         >div {
-            padding: 12px 6px;
+            padding: 0 10px;
+        }
+        >div:first-child {
+            padding: 0 10px 0 0;
+        }
+        >div:last-child {
+            padding: 0 0 0 10px;
+        }
+    }
+    @media only screen and (min-width: 1200px) {
+        padding: 25px;
+        >div {
+            padding: 0 12px;
+        }
+        >div:first-child {
+            padding: 0 12px 0 0;
+        }
+        >div:last-child {
+            padding: 0 0 0 12px;
         }
     }
 `;
@@ -46,13 +75,16 @@ export const ProfileImage = styled.div<{ backgroundImage: string }>`
     }
 `;
 export const DetailBodyBox = styled.div`
-    padding: 8px;
+    padding: 15px;
     width: 100%;
     font-size: 16px;
     line-height: 1.5;
     @media only screen and (min-width: 768px) {
-        padding: 12px;
+        padding: 20px;
         font-size: 15px;
+    }
+    @media only screen and (min-width: 1200px) {
+        padding: 25px;
     }
     a { color: #58a6ff; }
     a:hover { border-bottom: solid 1px #58a6ff; }

@@ -7,6 +7,9 @@ import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 import { orgIssueListSetState, selectedOrgState, Iissue, orgIssueSelector } from "../atoms";
 import { fetchIssueList } from "../api";
 
+const IssueListContainer = styled.div`
+    padding: 15px 0;
+`;
 const Modal = styled.div`
     position: fixed;
     left: 50%;
@@ -159,9 +162,11 @@ function ListIssues() {
 
         {/* ---------------------------[이슈 리스트]--------------------------- */}
         <div className="page-container">
-            {orgIssueSelect && 
-            orgIssueSelect.map((issueSet, i) => 
-            <IssueItems key={i} issueList={issueSet.issueList} />)}
+            <IssueListContainer>
+                {orgIssueSelect && 
+                orgIssueSelect.map((issueSet, i) => 
+                <IssueItems key={i} issueList={issueSet.issueList} />)}
+            </IssueListContainer>
         </div>
 
         {/* ---------------------------[버튼 영역]---------------------------- */}
