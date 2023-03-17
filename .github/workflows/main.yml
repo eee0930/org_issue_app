@@ -24,3 +24,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REACT_APP_GITHUB_TOKEN }}
         BRANCH: gh-pages
         FOLDER: build
+
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+        token: ${{ secrets.REACT_APP_GITHUB_TOKEN }}
