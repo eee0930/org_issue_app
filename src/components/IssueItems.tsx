@@ -54,7 +54,7 @@ function IssueItems({ issueList }: IIssueList) {
             </IssueBox>)}
             {/* --------------------------[광고 영역]------------------------- */}
             <AdBox>
-                <a href={AD_LINK} rel="noopener noreferrer">
+                <a href={AD_LINK} target="_blank" rel="noopener noreferrer">
                     <AdImg src={AD_PATH} 
                         onError={handleImgError}/> 
                 </a>
