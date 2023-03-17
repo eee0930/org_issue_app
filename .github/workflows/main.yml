@@ -23,6 +23,6 @@ jobs:
       with:
         GITHUB_TOKEN: ${{ secrets.REACT_APP_GITHUB_TOKEN }}
         branch: gh-pages
-        folder: front-app/dist
+        folder: front-app/build
       
 
