@@ -25,5 +25,6 @@ declare module 'styled-components' {
       tablet: number;
       mobile: number;
     },
+    backgroundColor: string;
   }
 }

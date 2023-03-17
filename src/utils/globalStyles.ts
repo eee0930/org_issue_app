@@ -47,7 +47,7 @@ export const GlobalStyle = createGlobalStyle`
         font-weight: 400;
         font-family: 'Poppins', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, Helvetica Neue, Segoe UI, Roboto, Ubuntu, sans-serif;
         color: ${(props) => props.theme.white.darker};
-        background-color: black;
+        background-color: ${props => props.theme.backgroundColor};
         line-height: 1.2;
     }
     .page-container {

@@ -33,6 +33,11 @@ const { persistAtom } = recoilPersist({
     storage: localStorage,
 });
 
+export const isDarkThemeState = atom({
+    key: "defaultTheme",
+    default: true,
+});
+
 export const issueNameState = atom<IIssueName>({
     key: "issueName",
     default: {
