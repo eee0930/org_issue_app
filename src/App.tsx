@@ -9,7 +9,6 @@ import { isDarkThemeState } from "./atoms";
 
 function App() {
   const isDarkTheme = useRecoilValue(isDarkThemeState);
-
   return (
     <ThemeProvider theme={isDarkTheme? darkTheme: lightTheme}>
       <GlobalStyle />

@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import SelectIssueOrg from "./SelectIssueOrg";
+import { useRecoilValue } from "recoil";
+import { isDarkThemeState } from "../atoms";
+import ThemeButton from "./ThemeButton";
 
 const HeaderContainer = styled.header`
     position: fixed;
@@ -23,9 +26,13 @@ const HeaderContainer = styled.header`
 `;
 
 function Header() {
-    return <HeaderContainer>
-        <SelectIssueOrg />
-    </HeaderContainer>;
+    const isDarkTheme = useRecoilValue(isDarkThemeState);
+    return (
+        <HeaderContainer>
+            <SelectIssueOrg />
+            <ThemeButton text={isDarkTheme ? "☀️ light" : "dark 🌙"} />
+        </HeaderContainer>
+    );
 }
 
 export default Header;

@@ -47,7 +47,7 @@ function DetailIssue() {
                 <CategorySection>
                     <Link to='/'>{org +  ' - ' +  rep} list </Link>
                 </CategorySection>
-                <DetailContainer>
+                <DetailContainer style={{padding: "30px"}}>
                     <Loader>
                         <div>
                             <div></div><div></div>
