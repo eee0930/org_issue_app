@@ -1,68 +1,11 @@
 import { Helmet } from "react-helmet";
 import { Loader } from "../utils/globalStyles";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 import IssueItems from "../components/IssueItems";
 import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 import { orgIssueListSetState, selectedOrgState, Iissue, orgIssueSelector } from "../atoms";
 import { fetchIssueList } from "../api";
-
-const IssueListContainer = styled.div`
-    padding: 15px 0;
-`;
-const Modal = styled.div`
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    z-index: 50;
-    transform: translate(-50%, -50%);
-    border-radius: 8px;
-    width: 300px;
-    height: 100px;
-    background-color: #fff;
-    color: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-const Footer = styled.div`
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 100;
-    background-color: ${props => props.theme.black.veryDark};
-    .col-6 {
-        padding: 15px 10px;
-    }
-    @media only screen and (min-width: 768px) {
-        .col-6 {
-            padding: 15px;
-            text-align: center;
-        }
-    }
-`;
-const Button = styled.button`
-    width: 100%;
-    height: 40px;
-    border-radius: 8px;
-    border: 1px solid #000;
-    font-size: 16px;
-    @media only screen and (min-width: 768px) {
-        width: 200px;
-    }
-`;
-const GetButton = styled(Button)`
-    border-color: ${props => props.theme.green.darker};
-    background-color: ${props => props.theme.green.darker};
-    color: ${props => props.theme.white.lighter};
-`;
-const ResetButton = styled(Button)`
-    border-color: ${props => props.theme.white.lighter};
-    background-color: ${props => props.theme.white.lighter};
-    color: ${props => props.theme.green.darker};
-`;
+import { Footer, GetButton, IssueListContainer, Modal, ResetButton } from "../utils/listIssuesStyles";
 
 interface INewIssueListSet {
     setId: string;
