@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/org_issue_app/static/js/main.01aeac9d.js",
+    "main.js": "/org_issue_app/static/js/main.68d443d8.js",
     "index.html": "/org_issue_app/index.html",
-    "main.01aeac9d.js.map": "/org_issue_app/static/js/main.01aeac9d.js.map"
+    "main.68d443d8.js.map": "/org_issue_app/static/js/main.68d443d8.js.map"
   },
   "entrypoints": [
-    "static/js/main.01aeac9d.js"
+    "static/js/main.68d443d8.js"
   ]
 }
